@@ -2,8 +2,6 @@ package config
 
 import (
 	"io/ioutil"
-	"log"
-	"os"
 
 	"gopkg.in/yaml.v3"
 )
@@ -20,7 +18,6 @@ type ServerConfig struct {
 func LoadData(path string) (Config, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatalln(os.Stderr, err)
 		return Config{}, nil
 	}
 	var config Config
