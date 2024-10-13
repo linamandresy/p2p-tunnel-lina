@@ -2,12 +2,14 @@ package config
 
 import (
 	"io/ioutil"
+	"runtime"
 
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Server ServerConfig `yaml:server`
+	Server ServerConfig
+	OSType string
 }
 
 type ServerConfig struct {
@@ -15,17 +17,21 @@ type ServerConfig struct {
 	Port int
 }
 
-func LoadData(path string) (Config, error) {
-	data, err := ioutil.ReadFile(path)
+func Detect(path ...string) (Config, error) {
+
+	if len(path) == 0 {
+		path = append(path, "config.yaml")
+	}
+	data, err := ioutil.ReadFile(path[0])
 	if err != nil {
-		return Config{}, nil
+		panic(err)
 	}
 	var config Config
 	err = yaml.Unmarshal(data, &config)
+	DetectOs(&config)
 	return config, err
 }
 
-func InitConfig() (Config, error) {
-	return LoadData("config.yaml")
-
+func DetectOs(config *Config) {
+	*&config.OSType = runtime.GOOS
 }
