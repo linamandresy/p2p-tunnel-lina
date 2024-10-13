@@ -3,23 +3,27 @@ package darwin
 import (
 	"client/config"
 	"fmt"
-	"log"
-
+	"git.zx2c4.com/wireguard-go"
 	"github.com/google/gopacket/pcap"
+	"log"
+	"strings"
 )
 
 func StartService(config config.Config) {
+	var deviceName string = GetDeviceName()
+
+}
+
+func GetDeviceName() string {
 	devices, err := pcap.FindAllDevs()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Available network devices :")
+	var no int = 0
 	for _, device := range devices {
-		fmt.Println(device.Name)
-		for _, address := range device.Addresses {
-			fmt.Printf("IP : %v , Subnet : %v \n", address.IP, address.Netmask)
+		if strings.HasPrefix(device.Name, "utun") {
+			no++
 		}
-		fmt.Println("================")
 	}
+	return fmt.Sprintf("utun%d", no)
 }
