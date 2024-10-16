@@ -1,18 +1,18 @@
 package main
 
 import (
-	"client/config"
-	"client/services/darwin"
+	"p2p-tunnel-lina/client/config"
+	"p2p-tunnel-lina/client/services/darwin"
 )
 
 func main() {
-
-	config, err := config.Detect()
+	var err error
+	config.CONFIG, err = config.Detect()
 	if err != nil {
 		panic(err)
 	}
 
-	StartServices(config)
+	StartServices(config.CONFIG)
 }
 
 func StartServices(config config.Config) {

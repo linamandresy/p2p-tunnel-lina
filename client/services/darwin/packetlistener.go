@@ -45,7 +45,7 @@ func StartListener(deviceName string) {
 			srcIP := ip.SrcIP
 			destIP := ip.DstIP
 
-			fmt.Printf("Source IP : %s, Destination IP : %s\n", srcIP, destIP)
+			fmt.Printf("Source IP : %s, Destination IP : %s\nValeur : %v", srcIP, destIP, packet)
 		}
 
 	}

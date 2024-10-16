@@ -62,7 +62,7 @@ func extractIP(packet []byte) string {
 }
 
 func assignIP(conn net.Conn) string {
-	ip := fmt.Sprintf("10.0.0.%d", len(Clients)+1)
-	conn.Write([]byte(fmt.Sprintf("IP :%s", ip)))
+	ip := fmt.Sprintf("13.0.0.%d", len(Clients)+2)
+	conn.Write([]byte(fmt.Sprintf("%s", ip)))
 	return ip
 }

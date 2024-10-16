@@ -1,3 +1,4 @@
 server:
   host: "localhost"
   port: 1309
+ostype: "os"

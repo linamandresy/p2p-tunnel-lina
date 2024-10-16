@@ -1,29 +1,35 @@
 package darwin
 
 import (
-	"client/config"
 	"fmt"
-	"git.zx2c4.com/wireguard-go"
-	"github.com/google/gopacket/pcap"
-	"log"
-	"strings"
+	"p2p-tunnel-lina/client/config"
+	"p2p-tunnel-lina/client/network"
+	"syscall"
 )
 
 func StartService(config config.Config) {
-	var deviceName string = GetDeviceName()
-
-}
-
-func GetDeviceName() string {
-	devices, err := pcap.FindAllDevs()
+	fd, ifaceName, err := StartInterface()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	var no int = 0
-	for _, device := range devices {
-		if strings.HasPrefix(device.Name, "utun") {
-			no++
+	defer syscall.Close(fd)
+
+	network.NETWORK_CONN, err = DialToServer(ifaceName)
+	if err != nil {
+		panic(err)
+	}
+	defer network.NETWORK_CONN.Close()
+	// StartListener(ifaceName)
+
+	// StartListener("en0")
+
+	var buf []byte = make([]byte, 4600)
+	for {
+		n, err := syscall.Read(fd, buf)
+		if err != nil {
+			panic(err)
 		}
+		fmt.Println(buf[:n])
+		fmt.Println("==============")
 	}
-	return fmt.Sprintf("utun%d", no)
 }

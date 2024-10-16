@@ -1,4 +1,4 @@
-module client
+module p2p-tunnel-lina/client
 
 go 1.23.1
 
